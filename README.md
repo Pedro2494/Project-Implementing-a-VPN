@@ -73,3 +73,46 @@ sudo apt update
 sudo apt install libssl-dev
 ```
 ---
+To automate the compilation of the code files one by one whith the correct order:
+
+Create a bash script:
+sudo nano compilar.sh
+with the following content:
+```bash
+#!/bin/bash
+
+# Script para compilar os programas em ordem
+
+echo "Compilando VPNserver.c..."
+gcc -o VPNserver VPNserver.c || { echo "Erro ao compilar VPNserver.c"; exit 1; }
+
+echo "Compilando CypherSoftwareVPN.c..."
+gcc -o CypherSoftwareVPN CypherSoftwareVPN.c || { echo "Erro ao compilar CypherSoftwareVPN.c"; exit 1; }
+
+echo "Compilando ProgUDP2.c..."
+gcc -o ProgUDP2 ProgUDP2.c || { echo "Erro ao compilar ProgUDP2.c"; exit 1; }
+
+echo "Compilando ProgUDP1.c com bibliotecas SSL..."
+gcc -o ProgUDP1 ProgUDP1.c -lssl -lcrypto || { echo "Erro ao compilar ProgUDP1.c"; exit 1; }
+
+echo "Compilação concluída com sucesso!"
+```
+Then you need to give execution permissions to the script 
+chmod +x compilar.sh
+Then execute the script:
+./compilar.sh
+
+Additionally you can create ana alias (opcional):
+Edit bashrc file:
+nano ~/.bashrc
+
+Add the following line to the end of the file:
+alias compilarvpn='~/CaminhoParaScript/compilar.sh'
+Save and close the editor.
+Then update the file with the following command:
+source ~/.bashrc
+
+You just need to type "compilarvpn" and the compilation will complete automatically 
+
+
+
